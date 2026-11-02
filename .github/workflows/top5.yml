@@ -1,0 +1,40 @@
+name: Top 5 pesama
+
+on:
+  schedule:
+    # GitHub zakazuje po UTC vremenu. Beograd je zimi UTC+1, a leti UTC+2,
+    # pa postoje dva termina; skripta propušta samo onaj koji je tog dana 9h.
+    - cron: "0 7 * * *"   # 9h po letnjem vremenu (CEST)
+    - cron: "0 8 * * *"   # 9h po zimskom vremenu (CET)
+  workflow_dispatch:       # dugme "Run workflow" = slanje na zahtev
+
+permissions:
+  contents: write          # da bi agent mogao da sačuva današnju listu za sutrašnje poređenje
+
+concurrency:
+  group: top5
+  cancel-in-progress: false
+
+jobs:
+  posalji:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Preuzmi kod
+        uses: actions/checkout@v4
+
+      - name: Pošalji top 5
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TRIGGER_SCHEDULE: ${{ github.event.schedule }}
+        run: python3 top5_agent.py
+
+      - name: Sačuvaj današnju listu (za poređenje sutra)
+        run: |
+          git config user.name "top5-agent"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state/history.json 2>/dev/null || exit 0
+          git diff --cached --quiet && exit 0
+          git commit -m "Lista za $(TZ=Europe/Belgrade date +%F)"
+          git push
