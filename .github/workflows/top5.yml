@@ -4,8 +4,8 @@ on:
   schedule:
     # GitHub zakazuje po UTC vremenu. Beograd je zimi UTC+1, a leti UTC+2,
     # pa postoje dva termina; skripta propušta samo onaj koji je tog dana 9h.
-    - cron: "0 7 * * *"   # 9h po letnjem vremenu (CEST)
-    - cron: "0 8 * * *"   # 9h po zimskom vremenu (CET)
+    - cron: "10 7 * * *"   # 9h po letnjem vremenu (CEST)
+    - cron: "10 8 * * *"   # 9h po zimskom vremenu (CET)
   workflow_dispatch:       # dugme "Run workflow" = slanje na zahtev
 
 permissions:
