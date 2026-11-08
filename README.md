@@ -4,6 +4,8 @@ Svakog dana u 9h (po beogradskom vremenu) šalje ti Telegram poruku sa 5 najslu�
 
 U poruci: pozicija, naslov, izvođač, trajanje, link „Slušaj na Deezer-u“ i oznaka promene u odnosu na prethodni dan (▲ / ▼ / = / NOVO).
 
+Opciono (LLM): ako dodaš tajnu `ANTHROPIC_API_KEY`, agent pozove Claude (Anthropic Messages API) koji na osnovu današnje liste napiše kratak komentar dana na srpskom, pa se on doda na kraj poruke. LLM dobija samo podatke sa liste (naslov, izvođač, promena pozicije). Ako ključa nema ili poziv ne uspe, poruka se šalje normalno, samo bez komentara. Model se menja promenljivom `ANTHROPIC_MODEL` (podrazumevano `claude-haiku-5-5`).
+
 ## Šta je u paketu
 
 | Fajl | Čemu služi |
@@ -57,6 +59,8 @@ U repozitorijumu: **Settings → Secrets and variables → Actions → New repos
 | `TELEGRAM_CHAT_ID` | broj iz koraka 2 |
 
 Imena moraju biti tačno ovakva (velika slova).
+
+Opciono, za LLM komentar: ključ napraviš na console.anthropic.com (API keys) i dodaš kao treću tajnu `ANTHROPIC_API_KEY`. Bez nje sve radi kao do sada.
 
 ### 5. Probaj odmah
 
